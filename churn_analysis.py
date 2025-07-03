@@ -1,9 +1,3 @@
-"""
-Churn Rate Analysis in SaaS Companies
-Dataset: Telco Customer Churn (Kaggle)
-Technologies: Python, Pandas, Matplotlib, Seaborn, Scikit-learn, Streamlit
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,16 +8,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix, roc_curve
 from scipy.stats import chi2_contingency
 
-# ----------------------
 # 1. DATA LOADING
-# ----------------------
 def load_data():
     df = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv')
     return df
 
-# ----------------------
 # 2. DATA CLEANING
-# ----------------------
 def clean_data(df):
     df = df.copy()
     # Standardize column names for consistency
@@ -56,9 +46,7 @@ def clean_data(df):
     df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
     return df, df_encoded
 
-# ----------------------
 # 3. EXPLORATORY DATA ANALYSIS (EDA)
-# ----------------------
 def plot_churn_distribution(df):
     fig, ax = plt.subplots()
     sns.countplot(x='Churn', data=df, ax=ax)
@@ -99,9 +87,7 @@ def plot_churn_by_numeric(df, col):
     except Exception as e:
         st.error(f'Error plotting {col} by Churn: {e}')
 
-# ----------------------
 # 4. STATISTICAL INSIGHTS
-# ----------------------
 def chi_square_test(df, col):
     if col not in df.columns:
         return np.nan, np.nan
@@ -116,9 +102,7 @@ def correlation_with_churn(df_encoded):
     corr = numeric_df.corr()['ChurnBinary'].sort_values(ascending=False)
     return corr
 
-# ----------------------
 # 5. PREDICTIVE MODELING
-# ----------------------
 def train_model(df_encoded):
     feature_cols = [col for col in df_encoded.columns if col not in ['CustomerID', 'Churn', 'ChurnBinary'] and pd.api.types.is_numeric_dtype(df_encoded[col])]
     X = df_encoded[feature_cols]
@@ -152,9 +136,7 @@ def plot_roc_curve(y_test, y_proba):
     ax.legend()
     st.pyplot(fig)
 
-# ----------------------
 # 6. STREAMLIT DASHBOARD
-# ----------------------
 def main():
     st.title('Churn Rate Analysis in SaaS Companies')
     st.markdown('---')
